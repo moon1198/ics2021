@@ -1,5 +1,5 @@
 STUID = 122101010009
-STUNAME = ja
+STUNAME = Ang Jiang
 
 # DO NOT modify the following code!!!
 
