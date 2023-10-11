@@ -13,6 +13,25 @@ int main(int argc, char *argv[]) {
   init_monitor(argc, argv);
 #endif
 
+#ifdef TEST_1
+  word_t expr(char *e, bool *success);
+  bool *success = false;
+  FILE *fp;
+  char *file_path = getenv("NEMU_HOME");
+  strcat(file_path, "/input");
+  fp = fopen(file_path, "r");
+  assert(fp != NULL);
+  char e[1024] = {};
+  uint32_t result = 0;
+  while(fscanf(fp,"%d %s", &result, e) == 2){
+	  if (result != expr(e, success)){
+		printf("%s %d %d\n", e, result, expr(e, success));
+	  }else{
+	  }
+  }
+  fclose(fp);
+  printf("all has tested\n");
+#endif
   /* Start engine. */
   engine_start();
 

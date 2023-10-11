@@ -9,7 +9,7 @@
  * This is useful when you use the `si' command.
  * You can modify this value as you want.
  */
-#define MAX_INSTR_TO_PRINT 10
+#define MAX_INSTR_TO_PRINT UINT32_MAX
 
 CPU_state cpu = {};
 uint64_t g_nr_guest_instr = 0;
@@ -27,6 +27,14 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #endif
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
+#ifndef CONFIG_WATCHPOINT
+  bool diff_wp();
+  if (diff_wp()){
+	  nemu_state.state = NEMU_STOP;
+  }
+
+
+#endif
 }
 
 #include <isa-exec.h>
@@ -41,6 +49,8 @@ static void fetch_decode_exec_updatepc(Decode *s) {
   s->EHelper(s);
   cpu.pc = s->dnpc;
 }
+
+
 
 static void statistic() {
   IFNDEF(CONFIG_TARGET_AM, setlocale(LC_NUMERIC, ""));
@@ -101,7 +111,10 @@ void cpu_exec(uint64_t n) {
     fetch_decode_exec_updatepc(&s);
     g_nr_guest_instr ++;
     trace_and_difftest(&s, cpu.pc);
-    if (nemu_state.state != NEMU_RUNNING) break;
+    if (nemu_state.state != NEMU_RUNNING) {
+		printf("n = %lu\n",n);
+		break;
+	}
     IFDEF(CONFIG_DEVICE, device_update());
   }
 
@@ -120,4 +133,13 @@ void cpu_exec(uint64_t n) {
       // fall through
     case NEMU_QUIT: statistic();
   }
+}
+
+void cpu_exec_steps(uint64_t n) {
+	for (;n > 0;n--){
+		printf("hello word %ld\n", n);
+		Decode s;
+		fetch_decode_exec_updatepc(&s);
+		trace_and_difftest(&s, cpu.pc);
+	}
 }
