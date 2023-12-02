@@ -56,6 +56,7 @@ static inline def_rtl(setrelopi, uint32_t relop, rtlreg_t *dest,
 // mul/div
 
 def_rtl_compute_reg(mulu_lo)
+def_rtl_compute_reg(muls_lo)
 def_rtl_compute_reg(mulu_hi)
 def_rtl_compute_reg(muls_hi)
 def_rtl_compute_reg(divu_q)

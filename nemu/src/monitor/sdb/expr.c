@@ -404,12 +404,12 @@ word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
 	  //paser the sentence and store the token to tokens
     *success = false;
-	return 1;
+		return 1;
   }
   FLAG = false;//判断是否，发生出错
   if  (judge_parentheses()){
-	printf("The pattern of expression is invalid.\n");
-	return 1;
+		printf("The pattern of expression is invalid.\n");
+		return 1;
   }
 
   //evaluate the result 

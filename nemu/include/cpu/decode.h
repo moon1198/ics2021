@@ -76,6 +76,9 @@ static inline void pattern_decode(const char *str, int len,
   panic("pattern too long");
 #undef macro
 finish:
+  //printf("%s\n", str);
+  //printf("0x%x  0x%x  %d\n", __key, __mask, __shift);
+  //printf("\n");
   *key = __key >> __shift;
   *mask = __mask >> __shift;
   *shift = __shift;

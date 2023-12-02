@@ -13,7 +13,7 @@ int main(int argc, char *argv[]) {
   init_monitor(argc, argv);
 #endif
 
-#ifdef TEST_1
+#ifdef CONFIG_EXPR_TEST
   word_t expr(char *e, bool *success);
   bool *success = false;
   FILE *fp;
@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
   uint32_t result = 0;
   while(fscanf(fp,"%d %s", &result, e) == 2){
 	  if (result != expr(e, success)){
-		printf("%s %d %d\n", e, result, expr(e, success));
+			printf("%s %d %d\n", e, result, expr(e, success));
 	  }else{
 	  }
   }

@@ -12,6 +12,12 @@
 #define MAX_INSTR_TO_PRINT UINT32_MAX
 
 CPU_state cpu = {};
+typedef struct{
+	int len;
+	word_t index;
+	char buf[16][128];	
+}ringbuf;
+ringbuf iringbuf = {.len = 16, .index = 0};
 uint64_t g_nr_guest_instr = 0;
 static uint64_t g_timer = 0; // unit: us
 static bool g_print_step = false;
@@ -25,18 +31,21 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #ifdef CONFIG_ITRACE_COND
   if (ITRACE_COND) log_write("%s\n", _this->logbuf);
 #endif
+
+#ifdef CONFIG_ITRACE_COND
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
+  IFDEF(CONFIG_ITRACE,strcpy(iringbuf.buf[iringbuf.index ++ % 16], _this->logbuf)); 
   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
-#ifndef CONFIG_WATCHPOINT
+#endif
+
+#ifdef CONFIG_WATCHPOINT
   bool diff_wp();
   if (diff_wp()){
 	  nemu_state.state = NEMU_STOP;
   }
-
-
 #endif
 }
-
+//insert the exec_name fun
 #include <isa-exec.h>
 
 #define FILL_EXEC_TABLE(name) [concat(EXEC_ID_, name)] = concat(exec_, name),
@@ -108,6 +117,8 @@ void cpu_exec(uint64_t n) {
 
   Decode s;
   for (;n > 0; n --) {
+	//printf("0x%x\n", cpu.pc);
+	//fflush(stdout);
     fetch_decode_exec_updatepc(&s);
     g_nr_guest_instr ++;
     trace_and_difftest(&s, cpu.pc);
@@ -130,6 +141,15 @@ void cpu_exec(uint64_t n) {
            (nemu_state.halt_ret == 0 ? ASNI_FMT("HIT GOOD TRAP", ASNI_FG_GREEN) :
             ASNI_FMT("HIT BAD TRAP", ASNI_FG_RED))),
           nemu_state.halt_pc);
+	  if(nemu_state.state == NEMU_ABORT || nemu_state.halt_ret != 0){
+		for (int i = 0; i < iringbuf.len; i ++){
+	  	  if (i == iringbuf.index - 1){
+	  	    Log("-->%s", iringbuf.buf[i]);
+	  	  }else{
+	  	    Log("   %s", iringbuf.buf[i]);
+	  	  }
+	  	}
+	  }
       // fall through
     case NEMU_QUIT: statistic();
   }

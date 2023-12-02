@@ -92,10 +92,12 @@ int main(int argc, char *argv[]) {
     assert(fp != NULL);
 
     int result;
-    fscanf(fp, "%d", &result);
-    pclose(fp);
 
-    printf("%u %s\n", result, buf);
+    if (fscanf(fp, "%d", &result)) {
+			pclose(fp);
+
+    	printf("%u %s\n", result, buf);
+		}
   }
   return 0;
 }

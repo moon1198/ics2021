@@ -17,13 +17,37 @@ uint8_t* new_space(int size) {
   return p;
 }
 
+typedef struct{
+	int len;
+	char buf[16][128];
+	word_t index;
+}ringbuf;
+extern ringbuf mringbuf;
+void display_mtrace(ringbuf *mtrace_buf);
+
+int device_num = -1;
+//ringbuf dringbuf = {.len = 16, .index = 0};
+
 static void check_bound(IOMap *map, paddr_t addr) {
   if (map == NULL) {
+#ifdef CONFIG_MTRACE
+		display_mtrace(&mringbuf);
+#endif
     Assert(map != NULL, "address (" FMT_PADDR ") is out of bound at pc = " FMT_WORD, addr, cpu.pc);
   } else {
+		if (addr <= map->high && addr >= map->low){
+		}else{
+#ifdef CONFIG_MTRACE
+display_mtrace(&mringbuf);
+#endif
     Assert(addr <= map->high && addr >= map->low,
         "address (" FMT_PADDR ") is out of bound {%s} [" FMT_PADDR ", " FMT_PADDR "] at pc = " FMT_WORD,
         addr, map->name, map->low, map->high, cpu.pc);
+		}
+//modify
+    //Assert(addr <= map->high && addr >= map->low,
+    //    "address (" FMT_PADDR ") is out of bound {%s} [" FMT_PADDR ", " FMT_PADDR "] at pc = " FMT_WORD,
+    //    addr, map->name, map->low, map->high, cpu.pc);
   }
 }
 

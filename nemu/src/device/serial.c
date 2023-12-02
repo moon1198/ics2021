@@ -31,6 +31,13 @@ void init_serial() {
   add_pio_map ("serial", CONFIG_SERIAL_PORT, serial_base, 8, serial_io_handler);
 #else
   add_mmio_map("serial", CONFIG_SERIAL_MMIO, serial_base, 8, serial_io_handler);
+	//for (int i = 0; i < 10; i ++) {
+	//	putc('a', stderr);
+	//}
+	//putc('b', stderr);
+	//*(volatile uint8_t *) serial_base = '\n';
+	//	putc('\n', stderr);
+
 #endif
 
 }

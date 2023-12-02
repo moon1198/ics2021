@@ -144,6 +144,34 @@ config ITRACE_COND
   string "Only trace instructions when the condition is true"
   default "true"
 
+config FTRACE
+  depends on TRACE 
+  bool "Enable function tracer"
+  default n
+	
+config MTRACE
+  depends on TRACE 
+  bool "Enable memory tracer"
+  default n
+
+config DTRACE
+  depends on TRACE 
+  bool "Enable device tracer"
+  default n
+
+config SDB
+  bool "Enable sdb testing"
+  default n
+
+config EXPR_TEST
+	depends on SDB
+  bool "Enable express evaluate testing"
+  default n
+
+config WATCHPOINT
+	depends on SDB
+  bool "Enable watchpoint testing"
+  default n
 
 config DIFFTEST
   depends on TARGET_NATIVE_ELF
@@ -185,6 +213,7 @@ config DIFFTEST_REF_NAME
   default "spike" if DIFFTEST_REF_SPIKE
   default "none"
 endmenu
+
 
 if MODE_SYSTEM
 source "src/memory/Kconfig"

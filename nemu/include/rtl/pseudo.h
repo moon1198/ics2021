@@ -11,6 +11,7 @@ static inline def_rtl(li, rtlreg_t* dest, const rtlreg_t imm) {
   rtl_addi(s, dest, rz, imm);
 }
 
+
 static inline def_rtl(mv, rtlreg_t* dest, const rtlreg_t *src1) {
   rtl_addi(s, dest, src1, 0);
 }
@@ -26,13 +27,27 @@ static inline def_rtl(neg, rtlreg_t *dest, const rtlreg_t* src1) {
 }
 
 static inline def_rtl(sext, rtlreg_t* dest, const rtlreg_t* src1, int width) {
+  word_t mask = 0;
+  switch (width){
+	case 1: mask = 0xff; break;
+	case 2: mask = 0xffff; break;
+	case 4: mask = 0xffffffff; break;
+	default: MUXDEF(CONFIG_RT_CHECK, assert(0), mask = 0);
+  }
+  *dest = (sword_t) (*src1) & mask; 
   // dest <- signext(src1[(width * 8 - 1) .. 0])
-  TODO();
 }
 
 static inline def_rtl(zext, rtlreg_t* dest, const rtlreg_t* src1, int width) {
   // dest <- zeroext(src1[(width * 8 - 1) .. 0])
-  TODO();
+  word_t mask = 0;
+  switch (width){
+	case 1: mask = 0xff; break;
+	case 2: mask = 0xffff; break;
+	case 4: mask = 0xffffffff; break;
+	default: MUXDEF(CONFIG_RT_CHECK, assert(0), mask = 0);
+  }
+  *dest = (word_t) (*src1) & mask; 
 }
 
 static inline def_rtl(msb, rtlreg_t* dest, const rtlreg_t* src1, int width) {
