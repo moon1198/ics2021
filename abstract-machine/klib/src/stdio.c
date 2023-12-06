@@ -167,6 +167,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
 						v_out[0] = va_arg(ap, int);
 						v_out[1] = '\0';
 						break;
+					case 'x':
 					case 'p':
 						my_utoa(buf, va_arg(ap, int), 16);
 						strcat(v_out, "0x");
