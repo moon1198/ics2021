@@ -3,11 +3,16 @@
 
 #include <common.h>
 
+enum{MCAUSE = 32, MSTATUS, MEPC, TOTAL_REG};
 typedef struct {
   struct {
     rtlreg_t _32;
   } gpr[32];
+  struct {
+    rtlreg_t _32;
+  } csr[3];
 
+  rtlreg_t mtvec;
   vaddr_t pc;
 } riscv32_CPU_state;
 

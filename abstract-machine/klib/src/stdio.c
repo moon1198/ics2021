@@ -32,6 +32,24 @@ void my_itoa (char *buf, int num, int hex){
 		buf[len++] = temp[i--];	
 	}
 }
+void my_utoa (char *buf, uint32_t num, int hex){
+	char num_arr[] = "0123456789abcdef";
+	char temp[128];
+	int len = 0;
+	int i = 0;
+	int rem = 0;
+	//反向写入temp
+	temp[i++] = '\0';
+	do{
+		rem = num % hex;
+		temp[i++] = num_arr[rem];
+		num = num / hex;
+	}while(num != 0);
+	i--;
+	while (i >= 0){
+		buf[len++] = temp[i--];	
+	}
+}
 int my_atoi(const char *str){
 	int num = 0;
 	if (str == NULL) return -1;
@@ -69,7 +87,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
 						strcat(v_out, buf);
 						break;
 					case 'x':
-						my_itoa(buf, va_arg(ap, int), 16);
+						my_utoa(buf, va_arg(ap, int), 16);
 						space_count = num - strlen(buf);
 						if (space_count > 0){
 							memset(v_out, '0', space_count);
@@ -109,7 +127,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
 						strcat(v_out, buf);
 						break;
 					case 'x':
-						my_itoa(buf, va_arg(ap, int), 16);
+						my_utoa(buf, va_arg(ap, int), 16);
 						space_count = num - strlen(buf);
 						if (space_count > 0){
 							memset(v_out, '0', space_count);
@@ -148,6 +166,11 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
 					case 'c':
 						v_out[0] = va_arg(ap, int);
 						v_out[1] = '\0';
+						break;
+					case 'p':
+						my_utoa(buf, va_arg(ap, int), 16);
+						strcat(v_out, "0x");
+						strcat(v_out, buf);
 						break;
 					default:
 						putch('a');

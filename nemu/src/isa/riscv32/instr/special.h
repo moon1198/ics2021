@@ -21,7 +21,7 @@ static int call_ret_flag = 0;
 //1:call, 0:ret
 def_EHelper(jal) {
 #ifdef CONFIG_FTRACE
-
+#define NOT_DISPLAY_FUNC
   char *name = NULL;
   name = get_func_name(id_src1->imm);
 
@@ -30,7 +30,13 @@ def_EHelper(jal) {
   }
   call_ret_flag = 1;
   if (name != NULL){
+#ifdef NOT_DISPLAY_FUNC
+		if (strcmp(name, "putch")){
+#endif
   	printf(FMT_PADDR ": call %*s[%s@" FMT_PADDR "]\n", s->pc, space_num, "", name, id_src1->imm);
+#ifdef NOT_DISPLAY_FUNC
+		}
+#endif
   }else{
   	printf(FMT_PADDR ": call %*s[???@" FMT_PADDR "]\n", s->pc, space_num, "", id_src1->imm);
   }
@@ -50,7 +56,13 @@ def_EHelper(jalr) {
     char *name = NULL;
 	name = get_func_name(s->pc);
 	if (name != NULL){
+#ifdef NOT_DISPLAY_FUNC
+		if (strcmp(name, "putch")){
+#endif
 		printf(FMT_PADDR ": ret  %*s[%s]\n", s->pc, space_num, "", name);
+#ifdef NOT_DISPLAY_FUNC
+		}
+#endif
 	}else {
 		printf(FMT_PADDR ": ret  %*s[???]\n", s->pc, space_num, "");
 	}
@@ -62,7 +74,13 @@ def_EHelper(jalr) {
     char *name = NULL;
 	name = get_func_name(s->dnpc);
   	if (name != NULL){
+#ifdef NOT_DISPLAY_FUNC
+		if (strcmp(name, "putch")){
+#endif
   		printf(FMT_PADDR ": call %*s[%s@" FMT_PADDR "]\n", s->pc, space_num, "", name, s->dnpc);
+#ifdef NOT_DISPLAY_FUNC
+		}
+#endif
   	}else{
   		printf(FMT_PADDR ": call %*s[???@" FMT_PADDR "]\n", s->pc, space_num, "", s->dnpc);
   	}
@@ -108,3 +126,79 @@ def_EHelper(bgeu) {
   }
 }
 
+def_EHelper(ecall) {
+	isa_raise_intr(11, s->pc);
+	rtl_j(s, cpu.mtvec);
+}
+
+def_EHelper(csrrw) {
+	//printf("%d", id_src2->imm);
+	word_t tmp = 0;
+	switch (id_src2->imm) {
+		case 0b1101000010:
+			if (ddest == (rtlreg_t*)&cpu.gpr[0]){
+				cpu.csr[0]._32 = *dsrc1;
+			}else {
+				tmp = cpu.csr[0]._32;
+				cpu.csr[0]._32 = *dsrc1;
+				*ddest = tmp;
+			}
+			break;
+		case 0b1100000000:
+			if (ddest == (rtlreg_t*)&cpu.gpr[0]){
+				cpu.csr[1]._32 = *dsrc1;
+			}else {
+				tmp = cpu.csr[1]._32;
+				cpu.csr[1]._32 = *dsrc1;
+				*ddest = tmp;
+			}
+			break;
+		case 0b1101000001:
+			if (ddest == (rtlreg_t*)&cpu.gpr[0]){
+				cpu.csr[2]._32 = *dsrc1;
+			}else {
+				tmp = cpu.csr[2]._32;
+				cpu.csr[2]._32 = *dsrc1;
+				*ddest = tmp;
+			}
+			break;
+		case 0b1100000101:
+			if (ddest == (rtlreg_t*)&cpu.gpr[0]){
+				cpu.mtvec = *dsrc1;
+			}else {
+				tmp = cpu.mtvec;
+				cpu.mtvec = *dsrc1;
+				*ddest = tmp;
+			}
+			break;
+		default:
+			panic("other csr was used, not implement");
+	}
+}
+
+def_EHelper(csrrs) {
+	word_t tmp = 0;
+	switch (id_src2->imm) {
+		case 0b1101000010:
+			tmp = cpu.csr[0]._32;
+			cpu.csr[0]._32 = *dsrc1 | tmp;
+			*ddest = tmp;
+			break;
+		case 0b1100000000:
+			tmp = cpu.csr[1]._32;
+			cpu.csr[1]._32 = *dsrc1 | tmp;
+			*ddest = tmp;
+			break;
+		case 0b1101000001:
+			tmp = cpu.csr[2]._32;
+			cpu.csr[2]._32 = *dsrc1 | tmp;
+			*ddest = tmp;
+			break;
+		default:
+			panic("other csr was used, not implement");
+	}
+}
+
+def_EHelper(mret) {
+	rtl_j(s, csr(2) + 4);
+}
