@@ -24,8 +24,10 @@ void init_proc() {
 
   Log("Initializing processes...");
 
+	//char filename[] = "/bin/file-test";
+	char filename[] = "/bin/menu";
   // load program here
-	naive_uload(NULL, NULL);
+	naive_uload(NULL, filename);
 
 }
 

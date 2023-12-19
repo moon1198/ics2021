@@ -26,7 +26,7 @@ def_EHelper(jal) {
   name = get_func_name(id_src1->imm);
 
   if (call_ret_flag){
-	space_num += 1;
+		space_num += 1;
   }
   call_ret_flag = 1;
   if (name != NULL){
@@ -127,7 +127,7 @@ def_EHelper(bgeu) {
 }
 
 def_EHelper(ecall) {
-	isa_raise_intr(11, s->pc);
+	isa_raise_intr(gpr(17), s->pc);
 	rtl_j(s, cpu.mtvec);
 }
 

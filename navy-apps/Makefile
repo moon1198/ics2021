@@ -137,6 +137,8 @@ $(ARCHIVE): $(OBJS) libs
 ### Pull newlib from github if it does not exist
 ifeq ($(wildcard $(NAVY_HOME)/libs/libc/Makefile),)
   $(shell cd $(NAVY_HOME)/libs && git clone git@github.com:NJU-ProjectN/newlib-navy.git libc)
+
+	###$(shell cd $(NAVY_HOME)/libs && git clone https://github.com/NJU-ProjectN/newlib-navy.git libc)
 endif
 
 ### Build order control
@@ -166,8 +168,8 @@ $(CLEAN_ALL):
 .PHONY: clean-all $(CLEAN_ALL)
 
 ### Build fsimg and ramdisk for Nanos-lite
-APPS =
-TESTS = dummy hello
+APPS = nterm menu nslider 
+TESTS = dummy hello file-test timer-test event-test bmp-test
 
 fsimg: $(addprefix apps/, $(APPS)) $(addprefix tests/, $(TESTS))
 	-for t in $^; do $(MAKE) -s -C $(NAVY_HOME)/$$t install; done

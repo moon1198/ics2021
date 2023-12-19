@@ -1,6 +1,14 @@
 #ifndef __SYSCALL_H__
 #define __SYSCALL_H__
 
+//void do_syscall(Context *c);
+//
+//int fs_open(const char *pathname, int flags, int mode);
+//size_t fs_read(int fd, void *buf, size_t len);
+//size_t fs_write(int fd, const void *buf, size_t len);
+//size_t fs_lseek(int fd, size_t offset, int whence);
+//int fs_close(int fd);
+
 enum {
   SYS_exit,
   SYS_yield,

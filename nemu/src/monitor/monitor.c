@@ -113,7 +113,10 @@ void init_monitor(int argc, char *argv[]) {
   /* Load the image to memory. This will overwrite the built-in image. */
   long img_size = load_img();
 #ifdef CONFIG_FTRACE
+	
   load_elf_and_parse(elf_file);
+	char *ramdisk = "/home/jiang/ics2021/nanos-lite/build/ramdisk.img";
+  load_elf_and_parse(ramdisk);
 #endif
 
   /* Initialize differential testing. */

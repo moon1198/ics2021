@@ -34,16 +34,16 @@ static void check_bound(IOMap *map, paddr_t addr) {
 		display_mtrace(&mringbuf);
 #endif
     Assert(map != NULL, "address (" FMT_PADDR ") is out of bound at pc = " FMT_WORD, addr, cpu.pc);
-  } else {
+  }else {
 		if (addr <= map->high && addr >= map->low){
-		}else{
+			}else{
 #ifdef CONFIG_MTRACE
 display_mtrace(&mringbuf);
 #endif
-    Assert(addr <= map->high && addr >= map->low,
-        "address (" FMT_PADDR ") is out of bound {%s} [" FMT_PADDR ", " FMT_PADDR "] at pc = " FMT_WORD,
+			Assert(addr <= map->high && addr >= map->low,
+				"address (" FMT_PADDR ") is out of bound {%s} [" FMT_PADDR ", " FMT_PADDR "] at pc = " FMT_WORD,
         addr, map->name, map->low, map->high, cpu.pc);
-		}
+			}
 //modify
     //Assert(addr <= map->high && addr >= map->low,
     //    "address (" FMT_PADDR ") is out of bound {%s} [" FMT_PADDR ", " FMT_PADDR "] at pc = " FMT_WORD,

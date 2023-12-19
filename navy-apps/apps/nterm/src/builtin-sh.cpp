@@ -23,6 +23,15 @@ static void sh_prompt() {
 }
 
 static void sh_handle_cmd(const char *cmd) {
+	if (cmd == NULL) return;
+	if (strncmp(cmd, "echo", 4) == 0) {
+		if (strlen(cmd) == 5) sh_printf("\n");
+		else sh_printf("%s", cmd + 5);
+	}else if (strncmp(cmd, "exit", 4) == 0){	
+		exit(0);
+	}else {
+			sh_printf("command not found\n");
+	}
 }
 
 void builtin_sh_run() {

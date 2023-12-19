@@ -11,7 +11,7 @@
  */
 #define MAX_INSTR_TO_PRINT UINT32_MAX
 
-CPU_state cpu = {};
+CPU_state cpu = {.csr[1]._32 = 0x1800};
 typedef struct{
 	int len;
 	word_t index;

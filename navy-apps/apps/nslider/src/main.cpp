@@ -1,6 +1,7 @@
 #include <SDL.h>
 #include <SDL_bmp.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <assert.h>
 
 #define W 400
@@ -54,6 +55,7 @@ int main() {
 
   while (1) {
     SDL_Event e;
+		printf("Waiting input\n");
     SDL_WaitEvent(&e);
 
     if (e.type == SDL_KEYDOWN) {
@@ -72,6 +74,7 @@ int main() {
         case SDLK_DOWN: next(rep); rep = 0; g = 0; break;
         case SDLK_K:
         case SDLK_UP: prev(rep); rep = 0; g = 0; break;
+        case SDLK_Q: exit(0); break;
         case SDLK_G:
           g ++;
           if (g > 1) {

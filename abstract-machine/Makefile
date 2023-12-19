@@ -9,7 +9,7 @@ html:
 
 
 ARCH ?= riscv32-nemu
-#ARCH ?= native
+##ARCH ?= native
 
 ### Default to create a bare-metal kernel image
 ifeq ($(MAKECMDGOALS),)
