@@ -39,6 +39,7 @@ CFLAGS_BUILD += $(if $(CONFIG_CC_ASAN),-fsanitize=address,)#not set
 CFLAGS_TRACE += -DITRACE_COND=$(if $(CONFIG_ITRACE_COND),$(call remove_quote,$(CONFIG_ITRACE_COND)),true)
 #CFLAGS 是编译器的选项，用于设置编译阶段的参数。
 CFLAGS  += $(CFLAGS_BUILD) $(CFLAGS_TRACE) -D__GUEST_ISA__=$(GUEST_ISA)
+#CFLAGS += -g
 #LDFLAGS 是链接器的选项，用于设置链接阶段的参数。
 LDFLAGS += $(CFLAGS_BUILD)
 

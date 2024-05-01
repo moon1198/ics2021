@@ -69,7 +69,6 @@ int fs_open(const char *pathname, int flags, int mode) {
 	int of_nums = LENGTH(open_file_table);
 	
 	
-	//printf("%s\n", pathname);
 	for (int i = 0; i < f_nums; ++ i) {
 		if (strcmp(pathname, file_table[i].name) == 0){
 			if (i <= 2) {
@@ -86,6 +85,10 @@ int fs_open(const char *pathname, int flags, int mode) {
 			}
 		}
 	}
+	printf("%s\n", pathname);
+	//for (int i = 0; i < f_nums; ++ i) {
+	//	printf("%d  %s\n", i, file_table[i].name);
+	//}
 	assert(0);
 	return -1;
 }

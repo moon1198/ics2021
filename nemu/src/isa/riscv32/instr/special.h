@@ -1,4 +1,4 @@
-#include "ftrace.h"
+//#include "ftrace.h"
 //const char *get_func_name(vaddr_t addr){
 //	for (int i = 0; i < func_symbol_num; i++){
 //		if (id_src1->imm >= func_symbol[i].start && id_src1->imm < func_symbol[i].end){

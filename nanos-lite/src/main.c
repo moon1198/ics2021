@@ -31,6 +31,7 @@ int main() {
 
 #ifdef HAS_CTE
   yield();
+  Log("Yield Nanos-lite");
 #endif
 
 	panic("Should not reach here");

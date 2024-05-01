@@ -119,8 +119,8 @@ static bool make_token(char *e) {
 			nr_token++;
 		}
 		break;
-        } 
-      }
+    	} 
+		}
 	
 
     if (i == NR_REGEX) {
@@ -420,12 +420,12 @@ word_t expr(char *e, bool *success) {
 	  printf("The sentence %s is invaild\n", e);
 	  return 1;
   }
-/*
-  for (int i = 0; i < nr_token; i++ ){
+
+	for (int i = 0; i < nr_token; i++ ){
 	printf("%s ", tokens[i].str);
-  }
-  printf("= %u\n", result);
-*/	
+	}
+	printf("= %u\n", result);
+	
   return result;
 }
 
